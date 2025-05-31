@@ -1,0 +1,1 @@
+assert (rev_grad - vanilla_grad).abs().max() < 1e-6

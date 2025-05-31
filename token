@@ -1,0 +1,19 @@
+import torch
+from torch import nn
+import math
+
+class GroupNorm(nn.GroupNorm):
+    def __init__(self, num_channels, **kwargs):
+        super().__init__(1, num_channels, **kwargs)
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        B, N, C = x.shape
+        x = x.permute(0, 2, 1)
+        x = torch.nn.functional.group_norm(
+            x, 
+            num_groups=1, 
+            weight=self.weight, 
+            bias=self.bias, 
+            eps=self.eps
+        )
+        return x.permute(0, 2, 1)
